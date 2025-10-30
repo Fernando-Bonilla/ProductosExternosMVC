@@ -22,6 +22,7 @@ namespace ProductosExternosMVC.Controllers
 
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> CrearProducto(CrearProductoDto _crearProductoDto)
         {
@@ -32,6 +33,18 @@ namespace ProductosExternosMVC.Controllers
             ProductoDto? producto = await servicioProductos.CrearProducto(_crearProductoDto.nombre, _crearProductoDto.precio);
 
             return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> BorrarProducto(string id)
+        {
+            Console.WriteLine($"borrar id: {id}");
+            //id = id.ToString();
+            ServicioProductos servicioProductos = new ServicioProductos();
+
+            servicioProductos.Borrar(id);
+
+            return RedirectToAction("Index", "Home");
         }
 
         public IActionResult Privacy()

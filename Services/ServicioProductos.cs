@@ -33,7 +33,8 @@ namespace ProductosExternosMVC.Services
         public string? Precio { get; set; }
 
         [JsonPropertyName("createdAt")]
-        public string? CreatedAt { get; set; }
+        public string? CreatedAt { get; set; }        
+        public string? UpdatedAt { get; set; }
     }
 
     public class ServicioProductos : IServicioProductos

@@ -1,0 +1,15 @@
+﻿@model ProductosExternosMVC.Models.EditarProductoDto
+
+<div>
+	<form method="post" action="editar">
+		<input type="hidden" name="id" value="@Model.id"/>
+		<label>
+			<input type="text" name="nombre" value="@Model.nombre"/>
+		</label>
+		<label>Precio
+			<input type="text" name="precio" value="@Model.precio" />
+		</label>
+
+		<button type="submit" asp-controller="Productos" asp-action="Editar" @* asp-route-id="@Model.id" *@>Editar</button>
+	</form>
+</div>

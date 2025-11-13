@@ -17,6 +17,10 @@ namespace ProductosExternosMVC.Services
         Task Borrar(string id);
         Task Modificar(ProductoDto productoDto);
         Task<List<ProductoDto>> Todos();
+
+        Task<List<ProductoDto>> BuscarPorKeyword(string keyword);
+
+        Task<List<ProductoDto>> FiltrarProductos(int precioMin, int precioMax);
     }
 
     // Creamos un Dto para mapear los productos, es necesario para serializar y deserializar
@@ -44,8 +48,47 @@ namespace ProductosExternosMVC.Services
 
         public ServicioProductos()
         {
-            _apiUrl = "https://68ffe1e9e02b16d1753f8cfe.mockapi.io/api/v1/productos";
+            //_apiUrl = "https://68ffe1e9e02b16d1753f8cfe.mockapi.io/api/v1/productos";
+            _apiUrl = "https://localhost:7016/Producto";
             _httpClient = new HttpClient();
+        }
+
+        public async Task<List<ProductoDto>> FiltrarProductos(int precioMin, int precioMax)
+        {
+            HttpResponseMessage response = await _httpClient.GetAsync($"{_apiUrl}/filtrar-por-precio/{precioMin}/{precioMax}");
+
+            if (response.IsSuccessStatusCode) 
+            {
+                string json = await response.Content.ReadAsStringAsync();
+                List<ProductoDto>? productos = JsonSerializer.Deserialize<List<ProductoDto>>(json);
+
+                return productos!;
+
+            }else
+            {
+                Console.WriteLine($"Error al filtrar los productos{response.StatusCode}");
+            }
+            return new List<ProductoDto>();
+        }
+
+        public async Task<List<ProductoDto>> BuscarPorKeyword(string keyword)
+        {
+            keyword = keyword.Trim().ToLower();
+
+            HttpResponseMessage response = await _httpClient.GetAsync($"{_apiUrl}/buscar-por-nombre/{keyword}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                string json = await response.Content.ReadAsStringAsync();
+                List<ProductoDto>? prod = JsonSerializer.Deserialize<List<ProductoDto>>(json);
+
+                return prod!;
+            }
+            else
+            {
+                Console.WriteLine($"Error al buscar el producto: {response.StatusCode}");
+                return new List<ProductoDto>();
+            }
         }
 
         public async Task<ProductoDto> Buscar(string id)
@@ -81,7 +124,9 @@ namespace ProductosExternosMVC.Services
 
         public async Task Borrar(string id)
         {
-            HttpResponseMessage response = await _httpClient.DeleteAsync($"{_apiUrl}/{id}");
+            HttpResponseMessage response = await _httpClient.DeleteAsync($"{_apiUrl}/{id}"); //  $"{_apiUrl}/producto?id={id}"
+
+
             if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine($"Producto con ID {id} eliminado correctamente.");
@@ -122,7 +167,7 @@ namespace ProductosExternosMVC.Services
             string json = JsonSerializer.Serialize(nuevoProducto);
             StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            HttpResponseMessage response = await _httpClient.PostAsync(_apiUrl, content);
+            HttpResponseMessage response = await _httpClient.PostAsync(_apiUrl+"/Crear", content);
 
             if (response.IsSuccessStatusCode)
             {
@@ -139,7 +184,8 @@ namespace ProductosExternosMVC.Services
         }
         public async Task<List<ProductoDto>> Todos()
         {
-            HttpResponseMessage response = await _httpClient.GetAsync(_apiUrl);
+            string endpointApi = "/ListarProductos";
+            HttpResponseMessage response = await _httpClient.GetAsync(_apiUrl+$"{endpointApi}");
 
             if (response.IsSuccessStatusCode)
             {

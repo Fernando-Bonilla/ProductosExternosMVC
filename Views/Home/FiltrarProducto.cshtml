@@ -1,10 +1,8 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-    <h1>@ViewBag.Productos.Count</h1>     
+    <h1>@ViewBag.Productos.Count</h1>
 
     <div class="card mb-4 shadow-sm">
         <div class="card-body">
@@ -76,26 +74,9 @@
                 </tr>
             </tbody>
         </table>
-    </div>  
-
-    <div class="card mb-4 shadow-sm">
-        <div class="card-body">
-            <form method="get" action="/Home/BuscarPorKeyword" class="row g-3 align-items-end">
-            
-                <div class="col-12 col-md-5">
-                    <label class="form-label">Nombre</label>
-                    <input type="text" name="keyword" placeholder="Nombre del producto" required class="form-control" />
-                    
-                </div>
-                <div class="col-12 col-md-2 d-grid">
-                    <button type="submit" class="btn btn-info">
-                        Buscar
-                    </button>
-                </div>               
-           
-            </form>
-        </div>
     </div>
+
+    
 
     <div class="card mb-4 shadow-sm">
         <div class="card-body">
@@ -118,6 +99,6 @@
             </form>
         </div>
     </div>
-    
-    
+
+
 </div>
